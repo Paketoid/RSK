@@ -12,52 +12,52 @@ def getDiagramMax(diagram): #returns (int, int)
         value = max(value, max(row))
     return value
 
+#can be optimized by keeping max for every row in memory
+
 
 def getNextToPurge(diagram, diagramMax):
-    for i in range(len(diagram)-1, -1, -1):
+    for i in range(len(diagram)):
         if diagram[i][-1] == diagramMax:
             return (i, len(diagram[i])-1)
     return (-1, -1)
 
 
 def getIndex(x, arr):
-    for i in range(len(arr)):
-        if x <= arr[i]:
+    for i in range(len(arr)-1,-1,-1):
+        if arr[i] < x:
             return i
-    return len(arr)
+    return -1
 
 
 def diagramsToDWord(P, Q):
     dWord = []
-    value = getDiagramMax(P)
-    toPurge = getNextToPurge(P, value)
+    value = getDiagramMax(Q)
+    toPurge = getNextToPurge(Q, value)
     
     while len(P):
-        print(len(P), P[toPurge[0]], value)
-        valueFromQ = Q[toPurge[0]][toPurge[1]]
+        valueFromP = P[toPurge[0]][toPurge[1]]
     
         if len(Q[toPurge[0]]) > 1:
-            Q[toPurge[0]] = Q[toPurge[0]][:-1]
-            P[toPurge[0]] = P[toPurge[0]][:-1]
+            Q[toPurge[0]] = Q[toPurge[0]][:toPurge[1]]
+            P[toPurge[0]] = P[toPurge[0]][:toPurge[1]]
         else:
-            Q = Q[:-1]
-            P = P[:-1]
+            Q = Q[:toPurge[0]]
+            P = P[:toPurge[0]]
             #Q = Q[:toPurge[0]] + Q[toPurge[0]+1:]
             #P = P[:toPurge[0]] + P[toPurge[0]+1:]
         
         for r in range(toPurge[0]-1,-1,-1):
-            if value > P[r][-1]:
-                value, P[r][-1] = P[r][-1], value
-                continue
-            c = getIndex(value, P[r])
-            value, P[r][-1] = P[r][-1], value
-            print(value)
-        print()
-        dWord.append((value, valueFromQ))
+            c = getIndex(valueFromP, P[r])
+            valueFromP, P[r][c] = P[r][c], valueFromP
+            #print(P)
+            #print(value, valueFromP)
+            #print(Q)
+            #print()
 
-        value = getDiagramMax(P)
-        toPurge = getNextToPurge(P, value)
-        
+        dWord.append((value, valueFromP))
+
+        value = getDiagramMax(Q)
+        toPurge = getNextToPurge(Q, value)
 
     return dWord
 
@@ -72,11 +72,13 @@ def clearDiagram(diagram):
 #take column with max number in SSYT and dispose of it from the bottom; repeat until done
 
 def dWordToMatrix(dWord):
-    m, n = dWord[0]
-    matrix = [[0 for _ in range(m)] for __ in range(n)]
+    m, n = -1, -1
+    for pair in dWord:
+        m, n = max(m, pair[0]), max(n, pair[1])
+    matrix = [[0 for _ in range(n)] for __ in range(m)]
 
     for pair in dWord:
-        matrix[pair[1]-1][pair[0]-1] += 1
+        matrix[pair[0]-1][pair[1]-1] += 1
     return matrix
 
 
@@ -101,8 +103,8 @@ with open("encrypted.txt","r") as fin, open("output.txt","w") as fout:
     dWord = diagramsToDWord(P, Q)
     fout.write("\n".join(map(str, P)) + f"\n\n" + "\n".join(map(str, Q)) + f"\n\n")
     matrix = dWordToMatrix(dWord)
-    #text = matrixToText(matrix)
+    text = matrixToText(matrix)
     
     fout.write(f"{dWord}\n\n")
-    fout.write("\n".join(map(str, matrix)))
-    #fout.write(text + "\n")
+    fout.write("\n".join(map(str, matrix)) + f"\n\n")
+    fout.write(text + "\n")
