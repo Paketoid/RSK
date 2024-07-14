@@ -91,7 +91,7 @@ def matrixToText(matrix):
     return res
 
 
-with open("encrypted.txt","r") as fin, open("output.txt","w") as fout:
+with open("encrypted.txt","r") as fin, open("logs_dec.txt","w") as logs, open("output.txt","w") as fout:
     shp = int(fin.readline().strip())
     P = stringToDiagram(fin.readline().strip(), shp)
     Q = stringToDiagram(fin.readline().strip(), shp)
@@ -99,13 +99,14 @@ with open("encrypted.txt","r") as fin, open("output.txt","w") as fout:
     clearDiagram(P)
     clearDiagram(Q)
 
-    fout.write("\n".join(map(str, P)) + f"\n\n" + "\n".join(map(str, Q)) + f"\n\n")
+    logs.write("\n".join(map(str, P)) + f"\n\n" + "\n".join(map(str, Q)) + f"\n\n")
 
     dWord = diagramsToDWord(P, Q)
-    fout.write("\n".join(map(str, P)) + f"\n\n" + "\n".join(map(str, Q)) + f"\n\n")
     matrix = dWordToMatrix(dWord)
     text = matrixToText(matrix)
     
-    fout.write(f"{dWord}\n\n")
-    fout.write("\n".join(map(str, matrix)) + f"\n\n")
+    logs.write(f"{dWord}\n\n")
+    logs.write("\n".join(map(str, matrix)) + f"\n\n")
+    logs.write(text)
+
     fout.write(text)
