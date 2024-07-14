@@ -23,7 +23,7 @@ def matrixToDWord(matrix):
 
 def getIndex(x, arr):
     for i in range(len(arr)):
-        if x <= arr[i]:
+        if x < arr[i]:
             return i
     return len(arr)
 
@@ -32,18 +32,18 @@ def dWordToDiagram(dWord):
     P, Q = [], []
     def insert(i, j):
         for r in range(len(P)):
-            if i > P[r][-1]:
-                P[r].append(i); Q[r].append(j)
+            if j >= P[r][-1]:
+                P[r].append(j); Q[r].append(i)
                 return
             #c = bisect(P[r], i)
-            c = getIndex(i, P[r])
+            c = getIndex(j, P[r])
             #print(c, len(P[r]))
-            P[r][c], i = i, P[r][c]
-        P.append([i])
-        Q.append([j])
+            P[r][c], j = j, P[r][c]
+        P.append([j])
+        Q.append([i])
 
     for pair in dWord:
-        insert(pair[1], pair[0])
+        insert(pair[0], pair[1])
     return (P, Q)
 
 
@@ -74,7 +74,7 @@ with open("input.txt", "r") as fin, open("logs.txt", "w") as logs, open("encrypt
     text = fin.readline().strip()
     n, m = getDimensions(text)
     matrix = textToMatrix(text, n, m)
-    dWord = sorted(matrixToDWord(matrix), key=lambda x: (x[1], x[0]))
+    dWord = sorted(matrixToDWord(matrix))
     P, Q = dWordToDiagram(dWord)
     lamb = getShape(P)
     P_w, Q_w = getWeight(P), getWeight(Q)
