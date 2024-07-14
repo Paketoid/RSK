@@ -84,9 +84,10 @@ def dWordToMatrix(dWord):
 
 def matrixToText(matrix):
     res = ""
+    abc = " abcdefghijklmnopqrstuvwxyz"
     for line in matrix:
         for c in line:
-            res += chr(c + ord(' '))
+            res += abc[c]
     return res
 
 
@@ -107,4 +108,4 @@ with open("encrypted.txt","r") as fin, open("output.txt","w") as fout:
     
     fout.write(f"{dWord}\n\n")
     fout.write("\n".join(map(str, matrix)) + f"\n\n")
-    fout.write(text + "\n")
+    fout.write(text)
