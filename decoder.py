@@ -86,7 +86,8 @@ def dWordToMatrix(dWord):
 
 def matrixToText(matrix):
     res = ""
-    abc = " abcdefghijklmnopqrstuvwxyz"
+    with open("alphabet.txt","r") as alph:
+        abc = alph.readline().strip()
     for line in matrix:
         for c in line:
             res += abc[c]

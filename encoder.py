@@ -4,10 +4,9 @@ import math
 from collections import Counter
 
 
-abc = " abcdefghijklmnopqrstuvwxyz"
-
-
 def textToMatrix(text, n, m):
+    with open("alphabet.txt","r") as alph:
+        abc = alph.readline().strip()
     A = [text[i*m:(i+1)*m] for i in range(n)]
     res = [[abc.find(c) for c in line] for line in A]
     return res
@@ -67,8 +66,6 @@ def getWeight(diagram):
         wei += Counter(row)
     return [(i, wei[i]) for i in range(1, len(wei)+1)]
 
-
-#todo: make n, m depend on text
 #n, m = 5, 6
 
 with open("input.txt", "r") as fin, open("logs.txt", "w") as logs, open("encrypted.txt", "w") as fout:
