@@ -6,7 +6,7 @@ from collections import Counter
 
 def textToMatrix(text, n, m):
     with open("alphabet.txt","r") as alph:
-        abc = alph.readline().strip()
+        abc = alph.readline().replace("\n", "")
     A = [text[i*m:(i+1)*m] for i in range(n)]
     res = [[abc.find(c) for c in line] for line in A]
     return res
