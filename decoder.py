@@ -1,8 +1,10 @@
 def stringToDiagram(st, shp):
     arr = st.split()
     res = []
-    for i in range(len(arr)//shp):
-        res.append(list(map(int, arr[i*shp:(i+1)*shp])))
+    ind = 0
+    for i in shp:
+        res.append(list(map(int, arr[ind:ind + i])))
+        ind += i
     return res
 
 
@@ -92,12 +94,13 @@ def matrixToText(matrix):
 
 
 with open("encrypted.txt","r") as fin, open("logs_dec.txt","w") as logs, open("output.txt","w") as fout:
-    shp = int(fin.readline().strip())
+    #shp = int(fin.readline().strip())
+    shp = list(map(int, fin.readline().strip().split()))
     P = stringToDiagram(fin.readline().strip(), shp)
     Q = stringToDiagram(fin.readline().strip(), shp)
 
-    clearDiagram(P)
-    clearDiagram(Q)
+    #clearDiagram(P)
+    #clearDiagram(Q)
 
     logs.write("\n".join(map(str, P)) + f"\n\n" + "\n".join(map(str, Q)) + f"\n\n")
 

@@ -15,6 +15,7 @@ def textToMatrix(text, n, m):
 
 def matrixToDWord(matrix):
     dWord = []
+    n, m = len(matrix), len(matrix[0])
     for j in range(m):
         for i in range(n):
             dWord += [(i+1, j+1)]*matrix[i][j]
@@ -86,5 +87,9 @@ with open("input.txt", "r") as fin, open("logs.txt", "w") as logs, open("encrypt
     logs.write("\n".join(map(str, matrix)))
     logs.write(f"\n\nP_w={P_w}\nQ_w={Q_w}")
 
-    fout.write(f"{lamb[0]}\n")
-    fout.write(" ".join([" ".join(list(map(str, row))+["0"]*(len(P[0])-len(row))) for row in P]) + f"\n" + " ".join([" ".join(list(map(str, row))+["0"]*(len(Q[0])-len(row))) for row in Q]))
+    #fout.write(f"{lamb[0]}\n")
+    #fout.write(" ".join([" ".join(list(map(str, row))+["0"]*(len(P[0])-len(row))) for row in P]) + f"\n" + " ".join([" ".join(list(map(str, row))+["0"]*(len(Q[0])-len(row))) for row in Q]))
+    fout.write(" ".join(list(map(str, lamb))) + f"\n")
+    fout.write(" ".join([" ".join(list(map(str, row))) for row in P]) + f"\n" + " ".join([" ".join(list(map(str, row))) for row in Q]))
+    #+["0"]*(len(Q[0])-len(row))
+    #+["0"]*(len(P[0])-len(row))
